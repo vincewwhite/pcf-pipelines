@@ -79,4 +79,4 @@ inputs:
   - name: pcf-pipelines
 
 run:
-  path: pcf-pipelines/tasks/config-is_tile/task.sh
+  path: pcf-pipelines/tasks/config-is-tile/task.sh
