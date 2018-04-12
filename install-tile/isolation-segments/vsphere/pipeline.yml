@@ -11,14 +11,14 @@ resources:
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: {{git_private_key}}
+    private_key: {{github_token}}
 
 - name: p-isolation-segment
   type: pivnet
   source:
     api_token: {{pivnet_token}}
     product_slug: p-isolation-segment
-    product_version: {{p-isolation-segment_major_minor_version}}
+    product_version: {{product_version}}
     sort_by: semver
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
-      IAAS: "vsphere"
+      IAAS: {{iaas_type}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
@@ -41,7 +41,6 @@ jobs:
       OPSMAN_CLIENT_SECRET: ""
       PIVNET_API_TOKEN: {{pivnet_token}}
       NO_PROXY: {{company_proxy_domain}}
-      OM_IP: {{om_ip}}
 
 - name: stage-p-isolation-segment
   plan:
@@ -72,7 +71,7 @@ jobs:
     - get: pcf-pipelines
     - get: pcf-ops-manager
       params: {globs: []}
-      passed: [stage-ert]
+      passed: [stage-p-isolation-segment]
       trigger: true
     - get: pivnet-product
       resource: p-isolation-segment
@@ -85,7 +84,7 @@ jobs:
     DEBUG:
       DEBUG: ((debug))
       PRODUCT_IDENTIFIER: ((product_identifier))
-      OPS_MGR_HOST: ((ops_mgr_host))
+      OPS_MGR_HOST: ((opsman_hostname))
       OPS_MGR_USR: ((opsman_admin_username))
       OPS_MGR_PWD: ((opsman_admin_password))
       NETWORK_NAME: ((network_name))
@@ -156,7 +155,7 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      ERRANDS_TO_DISABLE: {{ert_errands_to_disable}}
+      ERRANDS_TO_DISABLE: {{errands_to_disable}}
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
 
@@ -168,26 +167,3 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
-
-
-- name: wipe-env
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-  - task: wipe
-    file: pcf-pipelines/install-pcf/vsphere/tasks/wipe-env/task.yml
-    params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_IP: {{om_ip}}
-      GOVC_INSECURE: {{vcenter_insecure}}
-      GOVC_CA_CERT: {{vcenter_ca_cert}}
-      GOVC_URL: {{vcenter_host}}
-      GOVC_USERNAME: {{vcenter_usr}}
-      GOVC_PASSWORD: {{vcenter_pwd}}
-      GOVC_DATACENTER: {{vcenter_datacenter}}
-      GOVC_DATASTORE: {{vcenter_datastore}}
-      GOVC_NETWORK: {{om_vm_network}}
-      GOVC_RESOURCE_POOL: {{om_resource_pool}}
-      GOVC_HOST: {{om_vm_host}}

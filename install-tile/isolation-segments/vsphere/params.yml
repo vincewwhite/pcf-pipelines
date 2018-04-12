@@ -6,9 +6,13 @@ github_username: CHANGEME # [R] Your github username
 
 iaas_type: vsphere
 
+# If set to a non-empty string, bypass DNS when uploading stemcells to Ops Manager
+company_proxy_domain: CHANGEME
+
 ## Ops Manager installation meta data
-ops_mgr_ip: CHANGEME  # [O] Ops Manager IP if behind proxy
-ops_mgr_host: CHANGEME  # [R] Ops Manager FQDN, ex: opsmgr.example.com
+ops_mgr_host:
+opsman_hostname: CHANGEME  # [R] Ops Manager FQDN, ex: opsmgr.example.com
+opsman_domain_or_ip_address: CHANGEME  # [O] Ops Manager IP if behind proxy
 opsman_admin_username: CHANGEME  # [R] Ops Manager admin user
 opsman_admin_password: CHANGEME  # [R] Ops Manager admin password
 
@@ -79,6 +83,8 @@ executor_disk_capacity: ""
 executor_memory_capacity: ""
 insecure_docker_registry_list: ""
 placement_tag: CHANGEME
+
+errands_to_disable: CHANGEME
 
 isolated_ha_proxy_instances: 3
 isolated_router_instances: 3
