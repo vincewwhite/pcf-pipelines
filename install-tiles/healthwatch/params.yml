@@ -1,0 +1,33 @@
+# legacy pivnet token for downloading tile
+pivnet_token: ((pivnet_token))
+
+# opsman connection info
+opsman_domain_or_ip_address:
+opsman_admin_username:
+opsman_admin_password:
+
+# required network config
+singleton_jobs_az: us-gov-west-1a
+other_azs: us-gov-west-1a,us-gov-west-1b,us-gov-west-1c
+network_name: services
+services_network_name: dynamic-services
+health_check_az: us-gov-west-1a
+
+product_name: p-healthwatch
+product_identifier: p-healthwatch
+product_version: 1.1.6
+
+mysql_skip_name_resolve: true
+
+# Optional foundation name tag.
+# If left empty, the system domain will be used.
+# Do not use any of the following characters: ! @ # ^ & $ % *
+# (Hyphens, underscores, and spaces are permitted)
+foundation_name: ''
+ingestor_instances: 4       # Number of instances of ingestors
+loader_instances: 4         # Number of instances of mySQL loaders
+canary_instances: 2         # Number of instances of canary health checkers
+bosh_health_instances: 1    # Number of instances of bosh health checkers
+bosh_tasks_instances: 2     # Number of instances of bosh tasks checkers
+cli_instances: 2            # Number of instances of CLI command health checkers
+opsman_instances: 2         # Number of instnces of opsman health checkers

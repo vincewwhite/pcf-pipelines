@@ -1,0 +1,59 @@
+# legacy pivnet token for downloading tile
+pivnet_token: ((pivnet_token))
+
+# opsman connection info
+opsman_domain_or_ip_address:
+opsman_admin_username:
+opsman_admin_password:
+
+# required network config
+singleton_jobs_az: us-gov-west-1a
+other_azs: us-gov-west-1a,us-gov-west-1b,us-gov-west-1c
+network_name: services
+services_network_name: dynamic-services
+
+# internal tile identifiers
+product_name: crunchy-postgresql
+product_identifier: crunchy-postgresql
+#product_version: ^3\..*\..*$
+product_version: 03.090512.109
+
+# crunchy global properties
+properties_consul_server_vm_type: t2.micro
+properties_consul_server_disk_type: 1024
+properties_postgresql_haproxy_vm_type: t2.micro
+properties_postgresql_haproxy_disk_type: 1024
+properties_smoke_tests_vm_type: t2.micro
+properties_smoke_tests_disk_type: 1024
+properties_az_multi_seclect: us-gov-west-1b,us-gov-west-1c
+
+# crunchy small plan properties
+properties_small_vm_type: m4.large
+properties_small_disk_type: 5120
+properties_small_postgresql_instance_count: 2
+properties_small_postgresql_service_quota: 10
+
+# crunchy medium plan properties
+properties_medium_vm_type: m4.large
+properties_medium_disk_type: 30720
+properties_medium_postgresql_instance_count: 3
+properties_medium_postgresql_service_quota: 10
+
+# crunchy large plan properties
+properties_large_vm_type: m4.large
+properties_large_disk_type: 102400
+properties_large_postgresql_instance_count: 3
+properties_large_postgresql_service_quota: 10
+
+# crunchy extra large plan properties
+properties_extra_large_vm_type: m4.large
+properties_extra_large_disk_type: 1048576
+properties_extra_large_postgresql_instance_count: 3
+properties_extra_large_postgresql_service_quota: 10
+
+# crunchy ressource config
+broker_instances: 1
+register_on_demand_service_broker_instances: automatic #only takes automatic
+delete_all_service_instances: automatic #only takes automatic
+upgrade_all_service_instances: automatic #only takes automatic
+acceptance_test_instances: automatic #only takes automatic

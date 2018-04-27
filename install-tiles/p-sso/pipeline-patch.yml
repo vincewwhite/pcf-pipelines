@@ -1,0 +1,32 @@
+- op: add
+  path: /jobs/name=config-pivnet-product/plan/-
+  value:
+    task: config-tile
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: {{docker_repository}}
+          username: {{docker_username}}
+          password: {{docker_password}}
+          insecure_registries:
+          - {{docker_ca_certs_domain}}
+          tag: {{docker_tag}}
+          ca_certs:
+          - domain: {{docker_ca_certs_domain}}
+            cert: {{docker_ca_certs_cert}}
+      run:
+        path: pcf-pipelines/install-tiles/tasks/config-crunchypostgres/task.sh
+
+      inputs:
+        - name: pcf-pipelines
+    params:
+      PRODUCT_IDENTIFIER: ((product_name))
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username)) # CREDHUB
+      OPSMAN_PASSWORD: ((opsman_admin_password)) # CREDHUB
+      SINGLETON_JOBS_AZ: ((singleton_jobs_az))
+      OTHER_AZS: ((other_azs))
+      NETWORK_NAME: ((network_name))
+      SERVICES_NETWORK_NAME: ((network_name))

@@ -1,0 +1,7 @@
+opsman_domain_or_ip_address: opsman.dagobah.aoc-pathfinder.cloud
+product_name: Pivotal_Single_Sign-On_Service
+product_identifier: Pivotal_Single_Sign-On_Service
+product_version: 1.5.3
+singleton_jobs_az: us-gov-west-1a
+other_azs: us-gov-west-1b,us-gov-west-1c
+network_name: deployment

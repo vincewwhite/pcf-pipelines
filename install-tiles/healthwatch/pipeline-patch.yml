@@ -1,0 +1,23 @@
+- op: add
+  path: /jobs/name=config-product/plan/-
+  value:
+    task: config-tile
+    file: pcf-pipelines-tileinstalls/tasks/config-healthwatch/task.yml
+    params:
+      PRODUCT_IDENTIFIER: {{product_name}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      SINGLETON_JOBS_AZ: {{singleton_jobs_az}}
+      OTHER_AZS: {{other_azs}}
+      NETWORK_NAME: {{network_name}}
+      SERVICES_NETWORK_NAME: {{services_network_name}}
+      MYSQL_SKIP_NAME_RESOLVE: {{mysql_skip_name_resolve}}
+      HEALTHWATCH_FOUNDATION_NAME: {{foundation_name}}
+      HEALTHWATCH_FORWARDER_INGESTOR_INSTANCES: {{ingestor_instances}}
+      HEALTHWATCH_FORWARDER_CANARY_INSTANCES: {{canary_instances}}
+      HEALTHWATCH_FORWARDER_BOSH_HEALTH_INSTANCES: {{bosh_health_instances}}
+      HEALTHWATCH_FORWARDER_BOSH_TASKS_INSTANCES: {{bosh_tasks_instances}}
+      HEALTHWATCH_FORWARDER_CLI_INSTANCES: {{cli_instances}}
+      HEALTHWATCH_FORWARDER_OPSMAN_INSTANCES: {{opsman_instances}}
+      HEALTHWATCH_FORWARDER_HEALTHCHECK_AZ: {{health_check_az}}

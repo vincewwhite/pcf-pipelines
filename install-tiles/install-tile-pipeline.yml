@@ -1,0 +1,203 @@
+resources: 
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: {{git_uri}}
+    branch: {{git_branch}}
+
+- name: stemcell
+  type: s3
+  source: 
+    access_key_id: {{s3_access_key_id}}
+    bucket: {{s3_bucket}}
+    endpoint: {{s3_bucket}}
+    regexp: {{stemcell_version_regexp}}
+    secret_access_key:  {{s3_secret_access_key}}
+
+- name: pivnet-product
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    bucket: {{s3_bucket}}
+    endpoint: {{s3_bucket}}
+    regexp: {{pivent_product_regexp}}
+    secret_access_key:  {{s3_secret_access_key}}
+
+jobs:
+- name: upload-pivnet-product
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: stemcell
+      params:
+        globs: 
+        - {{product_stemcell_tgz}}
+    - get: pivnet-product
+      params:
+        unpack: true
+      version:
+        path: {{pivnet_product_path}}
+  
+  - task: upload-tile
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: {{docker_repository}}
+          username: {{docker_username}}
+          password: {{docker_password}}
+          insecure_registries:
+          - {{docker_ca_certs_domain}}
+          tag: {{docker_tag}}
+          ca_certs:
+          - domain: {{docker_ca_certs_domain}}
+            cert: {{docker_ca_certs_cert}}
+      run:
+        path: pcf-pipelines/tasks/upload-product-and-stemcells/task.sh
+
+      inputs:
+        - name: pcf-pipelines
+        - name: pivnet-product
+        - name: stemcell
+    params:
+      IAAS: {{IAAS_Type}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
+      NO_PROXY: {{company_proxy_domain}}
+      OM_IP: {{om_ip}}
+
+- name: stage-pivnet-product
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-product
+      params:
+        unpack: true
+      version:
+        path: {{pivnet_product_path}}
+      passed: [upload-pivnet-product]
+      trigger: true
+
+  - task: stage-pivnet-product
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: {{docker_repository}}
+          username: {{docker_username}}
+          password: {{docker_password}}
+          insecure_registries:
+          - {{docker_ca_certs_domain}}
+          tag: {{docker_tag}}
+          ca_certs:
+          - domain: {{docker_ca_certs_domain}}
+            cert: {{docker_ca_certs_cert}}
+      run:
+        path: pcf-pipelines/tasks/stage-product/task.sh
+
+      inputs:
+        - name: pcf-pipelines
+        - name: pivnet-product
+    params:
+      IAAS: {{IAAS_Type}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
+
+- name: config-pivnet-product
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: stemcell
+      params:
+        globs: 
+        - {{product_stemcell_tgz}}
+    - get: pivnet-product
+      passed:
+      - stage-pivnet-product
+      trigger: true
+      params:
+        unpack: true
+      version:
+        path: {{pivnet_product_path}}
+  
+  #place holder to patch in configuration yml
+
+
+
+- name: deploy-pivnet-product
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-product
+      params:
+        unpack: true
+      version:
+        path: {{pivnet_product_path}}
+      passed: [config-pivnet-product]
+      trigger: true
+
+  - task: disable-errands
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: {{docker_repository}}
+          username: {{docker_username}}
+          password: {{docker_password}}
+          insecure_registries:
+          - {{docker_ca_certs_domain}}
+          tag: {{docker_tag}}
+          ca_certs:
+          - domain: {{docker_ca_certs_domain}}
+            cert: {{docker_ca_certs_cert}}
+      run:
+        path: pcf-pipelines/tasks/disable-errands/task.sh
+
+      inputs:
+        - name: pcf-pipelines
+    
+      params:
+        PRODUCT_NAME: {{pivnet_product}}
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+        OPS_MGR_USR: {{opsman_admin_username}}
+        OPS_MGR_PWD: {{opsman_admin_password}}
+        OPSMAN_CLIENT_ID: ""
+        OPSMAN_CLIENT_SECRET: ""
+
+  - task: deploy-tile
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: {{docker_repository}}
+          username: {{docker_username}}
+          password: {{docker_password}}
+          insecure_registries:
+          - {{docker_ca_certs_domain}}
+          tag: {{docker_tag}}
+          ca_certs:
+          - domain: {{docker_ca_certs_domain}}
+            cert: {{docker_ca_certs_cert}}
+      run:
+        path: pcf-pipelines/tasks/apply-changes/task.sh
+
+      inputs:
+        - name: pcf-pipelines
+    
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
+      

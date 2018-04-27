@@ -1,0 +1,106 @@
+# legacy pivnet token for downloading tile
+pivnet_token: ((pivnet_token))
+
+# opsman connection info
+opsman_domain_or_ip_address:
+opsman_admin_username:
+opsman_admin_password:
+
+# required network config
+singleton_jobs_az: us-gov-west-1a
+other_azs: us-gov-west-1a,us-gov-west-1b,us-gov-west-1c
+network_name: services
+
+# internal tile identifiers
+product_name: p-mysql
+product_identifier: p-mysql
+product_version: 1.10.13
+
+# backup configuration
+backup_options: "disable" # (enable|disable)
+backup_options_cron_schedule:
+backup_options_backup_all_masters: true # (true|false)
+backups: "disable" # (enable|disable|azure|gcs|scp)
+backups_s3_endpoint_url:
+backups_s3_bucket_name:
+backups_s3_bucket_path:
+backups_s3_access_key_id:
+backups_s3_secret_access_key:
+backups_s3_region:
+backups_azure_storage_account:
+backups_azure_storage_access_key:
+backups_azure_container:
+backups_azure_container_path:
+backups_azure_base_url:
+backups_gcs_service_account_json:
+backups_gcs_project_id:
+backups_gcs_bucket_name:
+backups_scp_user:
+backups_scp_server:
+backups_scp_destination:
+backups_scp_scp_key:
+backups_scp_port: 22
+
+# data service plan
+plan_collection_name: "100mb"
+plan_collection_description: "100MB default"
+plan_collection_max_storage_mb: 100
+plan_collection_max_user_connections: 40
+plan_collection_private: false
+
+# protection options
+optional_protections: "enable" # (enable|disable)
+optional_protections_recipient_email: "platform@aoc-pathfinder.cloud"
+optional_protections_prevent_auto_rejoin: false # (true|false)
+optional_protections_replication_canary: true # (true|false)
+optional_protections_notify_only: false # (true|false)
+optional_protections_canary_poll_frequency: 30
+optional_protections_canary_write_read_delay: 20
+
+# other config options
+innodb_flush_log_at_trx_commit: "two" # (zero|one|two)
+server_activity_logging: "enable" # (enable|disable)
+audit_logging_events: "connect,query"
+server_audit_excluded_users_csv:
+syslog: "disabled" # (enabled|disabled)
+syslog_address:
+syslog_port: 6514
+buffer_pool_size: "percent"
+buffer_pool_size_percent: 50
+buffer_pool_size_bytes:
+mysql_roadmin_password:
+mysql_skip_name_resolve: true # (true|false)
+mysql_innodb_large_prefix_enabled: true # (true|false)
+mysql_mysql_start_timeout: 60
+mysql_metrics_polling_frequency: 30
+mysql_cluster_probe_timeout: 10
+mysql_tmp_table_size: 33554432
+mysql_table_open_cache: 2000
+mysql_table_definition_cache: 8192
+mysql_max_connections: 1500
+mysql_binlog_expire_days: 7
+mysql_cluster_name: "cf-mariadb-galera-cluster"
+mysql_innodb_strict_mode: true # (true|false)
+mysql_cli_history: true # (true|false)
+mysql_allow_remote_admin_access: false # (true|false)
+mysql_allow_local_infile: true # (true|false)
+proxy_static_ips:
+proxy_shutdown_delay: 0
+proxy_startup_delay: 0
+cf_mysql_broker_quota_enforcer_pause: 30
+cf_mysql_broker_allow_table_locks: true # (true|false)
+cf_mysql_broker_bind_hostname:
+
+# resource config
+mysql_server_instance_type: automatic
+mysql_server_instances: 3
+mysql_persistent_disk_mb: 102400
+backup_prepare_instance_type: automatic
+backup_prepare_instances: 0
+backup_prepare_persistent_disk_mb: 204800
+mysql_proxy_instance_type: automatic
+mysql_proxy_instances: 2
+monitoring_instance_type: automatic
+monitoring_instances: 1
+mysql_broker_instance_type: automatic
+mysql_broker_instances: 2
