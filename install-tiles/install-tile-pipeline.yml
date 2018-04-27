@@ -166,7 +166,7 @@ jobs:
         - name: pcf-pipelines
     
       params:
-        PRODUCT_NAME: {{pivnet_product}}
+        PRODUCT_NAME: {{product_name}}
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
         OPS_MGR_USR: {{opsman_admin_username}}
         OPS_MGR_PWD: {{opsman_admin_password}}

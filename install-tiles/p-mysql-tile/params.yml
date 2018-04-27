@@ -1,10 +1,30 @@
-# legacy pivnet token for downloading tile
-pivnet_token: ((pivnet_token))
+#git info 
+git_branch: ""
+git_uri: ""
+
+#s3 store information
+s3_access_key_id: ""
+s3_bucket: ""
+s3_secret_access_key: ""
+s3_bucket: ""
+
+#docker registry information:
+docker_ca_certs_cert: ""
+docker_ca_certs_domain: ""
+docker_password: ""
+docker_repository: ""
+docker_tag: ""
+docker_username: ""
+
+#IaaS information:
+IAAS_Type: ""
 
 # opsman connection info
 opsman_domain_or_ip_address:
 opsman_admin_username:
 opsman_admin_password:
+company_proxy_domain: ""
+om_ip: ""
 
 # required network config
 singleton_jobs_az: us-gov-west-1a
@@ -12,9 +32,15 @@ other_azs: us-gov-west-1a,us-gov-west-1b,us-gov-west-1c
 network_name: services
 
 # internal tile identifiers
+pivent_product_regexp: ""
+pivnet_product_path: ""
 product_name: p-mysql
-product_identifier: p-mysql
-product_version: 1.10.13
+#product_identifier: p-mysql
+#product_version: 1.10.13
+
+#internal stemcell identifiers
+stemcell_version_regexp: ""
+product_stemcell_tgz: ""
 
 # backup configuration
 backup_options: "disable" # (enable|disable)
